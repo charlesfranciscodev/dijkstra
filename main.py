@@ -1,31 +1,23 @@
 import math
 
 
-class Node:
-    def __init__(self, identifier):
-        self.routes = []  # (id, distance)
-        self.identifier = identifier
-
-
 class Graph:
     def __init__(self):
-        self.nodes = {}  # identifier, node
+        self.nodes = {}  # identifier, routes
 
-    def read_standard_input(self):
-        self.start_id = input()  # start id
+    def read_input(self):
+        self.start_id = input()
         nb_nodes = int(input())
         for _ in range(nb_nodes):
             identifier = input()
-            self.nodes[identifier] = Node(identifier)
+            self.nodes[identifier] = []
 
         nb_routes = int(input())
         for _ in range(nb_routes):
-            route = input().split(" ")
-            identifier1 = route[0]
-            identifier2 = route[1]
-            distance = int(route[2])
-            self.nodes[identifier1].routes.append((identifier2, distance))
-            self.nodes[identifier2].routes.append((identifier1, distance))
+            identifier1, identifier2, distance = input().split()
+            distance = int(distance)
+            self.nodes[identifier1].append((identifier2, distance))
+            self.nodes[identifier2].append((identifier1, distance))
 
     def search(self, start_id):
         """Compute the shortest path between start and end using Dijkstra.
@@ -43,7 +35,7 @@ class Graph:
         while (len(opened) != 0):
             min_id = self.minimum(opened, distances)
             opened.remove(min_id)
-            for (neighbor_id, distance) in self.nodes[min_id].routes:
+            for (neighbor_id, distance) in self.nodes[min_id]:
                 alt_distance = distances[min_id] + distance
                 if (alt_distance < distances[neighbor_id]):
                     distances[neighbor_id] = alt_distance
@@ -65,6 +57,7 @@ class Graph:
         print(parents)
         print(distances)
 
+
 graph = Graph()
-graph.read_standard_input()
+graph.read_input()
 graph.solve()
