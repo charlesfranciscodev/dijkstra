@@ -6,11 +6,12 @@ printf "\n***** $file *****\n"
 while IFS=: read -r name
 do
   let "total += 1"
-  printf "test $name\n"
-  fileName="$name.txt"
-  eval "python3 main.py < "test/$fileName" &> act.txt"
+  printf "filename === $name\n"
+  eval "python main.py < test/$name &> act.txt"
 
-  diff --text "exp/$fileName" "act.txt"
+  expected="exp/$name"
+  #diff "$expected" "act.txt"
+  diff "exp/example$total.txt" "act.txt"
   if [ $? != 0 ]; then
     printf "test $total FAILED\n"
     printf 'name: %s\n' "$args"

@@ -1,2 +1,2 @@
-example
-example2
+example1.txt
+example2.txt
